@@ -1,0 +1,4 @@
+Idea principal: Conseguir estadisticas sobre las zonas de contenedores de basura que se llenan mas para asi añadir en caso de que sea necesario nuevos contenedores y planear la ruta de los barrenderos acorde a esto
+Idea principal: detector de temperatura para evitar incendios
+Idea descartada: cerrar el contendor debido que este lleno por miedo a vandalismo
+Idea descartada: debido a posible robo del panel solar y el precio del mantenimiento es muy alto
