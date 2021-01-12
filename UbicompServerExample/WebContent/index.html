@@ -1,67 +1,75 @@
+<!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>UAH Weather Stations</title>
-<!-- LIBRARIES -->
-<script src="./js/libs/jquery/jquery.min.js"></script>
-<script src="http://openlayers.org/api/OpenLayers.js"></script>
-<!-- STYLESHEETS -->
-<link rel="stylesheet" href="./css/bootswatch/flatly/bootstrap.min.css">
-<link rel="stylesheet" href="./css/navbar-fixed-side.css">
-<link rel="stylesheet" href="./css/layout.css">
-<link rel="stylesheet" href="./css/bootstrap-horizon.css">
-<link rel="stylesheet" href="./css/header.css">
-<link rel="stylesheet" href="./css/weather-icons.min.css">
-
+	<meta charset="ISO-8859-1">
+	<script src="./js/libs/jquery/jquery.min.js"></script>  
+	<title>Server example</title>
+	<style>
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		td, th {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+	</style>
 </head>
 <body>
-	<header>
-		<div class="wrapper">
-			<img src="./img/logo.png" alt="logo" width="50" height="50" /> 
-			<b class="pageTitle">UAH WHEATHER STATION</b>
-			<nav id="options"></nav>
-		</div>
-	</header>
-	<div class="container-fluid" style="height: 100%">
-		<iframe id="container-iframe" src="" width="100%" height="100%"
-			scrolling="yes" frameBorder="0" onload="onIframeLoad(this)" class="hide"> 
-		</iframe>
-	</div>
+	<script>
+         $(document).ready(function() 
+    	 {        	 
+        	 loadDetails(); 
+         });
+         
+ 		function loadDetails()
+        {
+       	 $.ajax(
+      		 {
+      			data:  {},
+      			url:   "GetContenedores",
+      			type:  'post',
+      			async: false,
+      			success:  function (response) 
+      			{	
+      				var resp = JSON.parse(response);
+      				console.log(resp);
+      				$("#dataTable").empty();
+      				var newRow = "";
+      				$.each(resp, function (i, value) 
+					{
+          				newRow += "<tr>";
+          				newRow += "<td>" + value.latitude + "</td>";     				
+          				newRow += "</tr>";	
+  					});  
+      				$("#dataTable").append(newRow);
+      			}
+      		});
+        }
+         
+         
+	</script>
+	<h1>SERVER EXAMPLE</h1>
+	<br>
+	<label>New value</label>
+	<input type="number" id="newValue"><br>
+	<br><br>
+	<table class="table">
+		<thead>
+		    <tr>
+		      <th scope="col">Date</th>
+		      <th scope="col">Temperature</th>
+		    </tr>
+		</thead>
+		<tbody id="dataTable">
+		</tbody>
+	</table>		
 </body>
-
-<script>
-	var idStation = 0;
-	var destination = (getURLParameter("dest") !== null) ? (getURLParameter("dest")) : "map.html";
-	$("#container-iframe").attr("src", "./" + destination);
-
-	//ES:Opciones de la barra de navegación
-	//EN:Options on the navigation bar
-	var htmlOptions = '<a href="index.html?dest=map.html">Map</a>'
-		+ '<a href="index.html?dest=contact.html">Contact</a>'
-		+ '<a href="index.html?dest=casa.html"> Mi Casa</a>';
-
-	document.getElementById('options').innerHTML = htmlOptions;
-	function getURLParameter(name) 
-	{
-		return decodeURIComponent((new RegExp('[?|&]' + name + '='
-				+ '([^&;]+?)(&|#|;|$)').exec(location.search) || [ null, '' ])[1].replace(/\+/g, '%20')) || null;
-	}
-
-	function onIframeLoad(obj) 
-	{
-		setTimeout
-		(
-			function() 
-			{
-				$("#loading-screen").addClass("hide");
-				$("#container-iframe").removeClass("hide");
-				$(document).height();
-				var height = $(document).height() > obj.contentWindow.document.body.scrollHeight ? 
-						$(document).height() + "px" : obj.contentWindow.document.body.scrollHeight + "px";
-				obj.style.height = height;
-				obj.height = height;
-			}, 500
-		);
-	}
-</script>
 </html>
