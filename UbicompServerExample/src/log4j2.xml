@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="debug">
+	<Appenders>				
+	    <!-- LOG -->
+		<RollingFile name="LogFile" fileName="C:/UbicompServerExample/log.log"
+			filePattern="C:/UbicompServerExample/logs/Ubicomp-%d{yyyy}-%i.log.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- UBICOMP EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>		
+	    <!-- LOGDB -->
+		<RollingFile name="LogFileDB" fileName="C://UbicompServerExample/logdb.log"
+			filePattern="C://UbicompServerExample/logs/Ubicomp-%d{yyyy}-%i.logdb.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- UBICOMP EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>		
+	    <!-- LOGMQTT -->
+		<RollingFile name="LogFileMQTT" fileName="C://UbicompServerExample/logmqtt.log"
+			filePattern="C://UbicompServerExample/logs/Ubicomp-%d{yyyy}-%i.logmqtt.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- UBICOMP EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>	
+		<RollingFile name="Logjson" fileName="C://UbicompServerExample/logjson.log"
+			filePattern="C://UbicompServerExample/logs/Ubicomp-%d{yyyy}-%i.logjson.gz">
+			<PatternLayout
+				pattern="%n%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %-30l %logger{36} ### %msg"
+				header="-- UBICOMP EXAMPLE --" />
+			<Policies>
+				<TimeBasedTriggeringPolicy />
+				<SizeBasedTriggeringPolicy size="10 MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="20"/>
+		</RollingFile>
+	</Appenders>
+	<Loggers>
+	    <!-- LOG -->
+		<Logger name="log" additivity="FALSE" level="DEBUG">
+            <AppenderRef ref="LogFile" level="DEBUG" />
+        </Logger>
+	    <!-- LOGDB -->
+		<Logger name="logdb" additivity="FALSE" level="DEBUG">
+            <AppenderRef ref="LogFileDB" level="DEBUG" />
+        </Logger>
+	    <!-- LOGMQTT -->
+		<Logger name="logmqtt" additivity="FALSE" level="DEBUG">
+            <AppenderRef ref="LogFileMQTT" level="DEBUG" />
+        </Logger>
+	</Loggers>
+</Configuration>
