@@ -17,26 +17,26 @@ import logic.Log;
 import logic.Logic;
 
 /**
- * SERVLET THAR SEARCH ALL THE STATIONS STORED IN THE DATABASE
+ * SERVLET THAR SEARCH ALL THE CITIES STORED IN THE DATABASE
  */
-@WebServlet("/GetStations")
-public class GetStations extends HttpServlet {
+@WebServlet("/GetContenedores")
+public class GetContenedores extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
-    public GetStations() 
+    public GetContenedores() 
     {
         super();
     }
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
 	{
-		Log.log.info("-- Get Stations information from DB--");
+		Log.log.info("-- Get Contenedores information from DB--");
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			ArrayList<Contenedores> values =Logic.getStationsFromDB();
+			ArrayList<Contenedores> values =Logic.getContenedoresFromDB();
 			String jsonStations = new Gson().toJson(values);
 			Log.log.info("JSON Values=> {}", jsonStations);
 			out.println(jsonStations);

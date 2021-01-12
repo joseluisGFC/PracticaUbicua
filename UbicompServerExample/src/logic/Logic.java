@@ -24,13 +24,13 @@ public class Logic
 	 * 
 	 * @return The list of all the stations stored in the db
 	 */
-	public static ArrayList<Contenedores> getStationsFromDB()
+	public static ArrayList<Contenedores> getContenedoresFromDB()
 	{
-		ArrayList<Contenedores> stations = new ArrayList<Contenedores>();
+		ArrayList<Contenedores> contenedores = new ArrayList<Contenedores>();
 		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
-		Contenedores station = new Contenedores();
+		Contenedores contenedor = new Contenedores();
 		try
 		{
 			con = conector.obtainConnection(true);
@@ -42,32 +42,32 @@ public class Logic
 			while (rs.next())
 			{
 				
-				station.setId(rs.getInt("id"));
-				station.setName(rs.getString("id"));
-				station.setLatitude(rs.getDouble("latitud"));
-				station.setLongitude(rs.getDouble("longuitud"));
-				stations.add(station);
-				station = new Contenedores();
+				contenedor.setId(rs.getInt("id"));
+				contenedor.setName(rs.getString("id"));
+				contenedor.setLatitude(rs.getDouble("latitud"));
+				contenedor.setLongitude(rs.getDouble("longuitud"));
+				contenedores.add(contenedor);
+				contenedor = new Contenedores();
 			}	
 			
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Contenedores>();
+			contenedores = new ArrayList<Contenedores>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Contenedores>();
+			contenedores = new ArrayList<Contenedores>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
-			stations = new ArrayList<Contenedores>();
+			contenedores = new ArrayList<Contenedores>();
 		} finally
 		{
 			conector.closeConnection(con);
 			
 		}
-		return stations;
+		return contenedores;
 		
 	}
 	public static ArrayList<Ciudad> getCitiesFromDB()
