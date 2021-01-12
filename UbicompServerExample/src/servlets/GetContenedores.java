@@ -36,8 +36,8 @@ public class GetContenedores extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			ArrayList<Contenedores> values =Logic.getContenedoresFromDB();
-			String jsonStations = new Gson().toJson(values);
+			ArrayList<Contenedores> values =Logic.getContenedoresFromDB();//llamas a logic DB para extraer el contenido de la base de datos
+			String jsonStations = new Gson().toJson(values);//Crea el json
 			Log.log.info("JSON Values=> {}", jsonStations);
 			out.println(jsonStations);
 		} catch (NumberFormatException nfe) 

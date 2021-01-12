@@ -36,13 +36,13 @@ public class Logic
 			con = conector.obtainConnection(true);
 			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.GetStations(con);
+			PreparedStatement ps = ConectionDDBB.GetStations(con);//la query de la base de datos
 			Log.log.info("Query=> {}", ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
 				
-				contenedor.setId(rs.getInt("id"));
+				contenedor.setId(rs.getInt("id"));//creas un objeto contendor con los datos de la query
 				contenedor.setName(rs.getString("id"));
 				contenedor.setLatitude(rs.getDouble("latitud"));
 				contenedor.setLongitude(rs.getDouble("longuitud"));
