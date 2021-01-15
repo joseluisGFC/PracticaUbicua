@@ -18,7 +18,7 @@ import db.ConectionDDBB;
 import db.Topics;
 import logic.Log;
 import logic.Logic;
-
+/*
 public class MQTTSuscriber implements MqttCallback
 {
 	public void searchTopicsToSuscribe(MQTTBroker broker){
@@ -141,4 +141,4 @@ public class MQTTSuscriber implements MqttCallback
 	{		
 	}
 }
-
+*/

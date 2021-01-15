@@ -1,11 +1,16 @@
 package db;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 /*
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -21,18 +26,21 @@ public class ConectionDDBB
     {
 		 Connection conn = null;
 		try {
-            Class.forName("com.mysql.jdbc.Driver").newInstance(); 
+            Context ctx = new InitialContext();
+            // Get the connection factory configured in Tomcat
+            DataSource ds = (DataSource) ctx.lookup("java:/comp/env/jdbc/ConexionMySQL");
 
-            String sURL = "jdbc:mysql://185.239.202.139:3306/ubicua";
-            conn = DriverManager.getConnection(sURL,"admin","passwd");
+            // Obtiene una conexion
+            conn = ds.getConnection();
             Log.logdb.debug("Conectado!!");
 
             
         } catch (SQLException e) {
         	 Log.logdb.debug(e.getMessage());
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-        	 Log.logdb.debug("Driver no detectado");
-        } 
+        } catch (NamingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
         return conn;
 		
 		
@@ -132,77 +140,29 @@ public class ConectionDDBB
     }   
     
     //************** CALLS TO THE DATABASE ***************************//
-    public static PreparedStatement GetStations(Connection con)
+    public static PreparedStatement GetContendores(Connection con)
     {
     	return getStatement(con,"SELECT * FROM contenedor");  	
     }    
-   
-    public static PreparedStatement GetStationSensors(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM sensor WHERE id_cont=?;");  	
 
-    }
+    public static PreparedStatement GetSensores(Connection con)
+    {
+    	return getStatement(con,"SELECT * FROM sensor");  	
+    }    
 
-    public static PreparedStatement GetInfoFromStation(Connection con)
+    public static PreparedStatement GetMedidas(Connection con)
     {
-    	return getStatement(con,"SELECT * FROM contenedor WHERE ID=?;");  	
-    }
-    
-    public static PreparedStatement GetStationsFromCiudad(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM contenedor WHERE id_ciudad=?");  	
-    } 
-    
-    public static PreparedStatement GetCities(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM ciudad;");  	
-    }
-    
-    public static PreparedStatement GetLastValueStationSensor(Connection con)
-    {
-    	return getStatement(con,"select * from medida where id_contenedor=? AND id_sensor= ? ORDER BY fecha LIMIT 1;");  	
-    }
-    
-    
-    public static PreparedStatement InsertnewMeasurement(Connection con)
-    {
-    	return getStatement(con,"INSERT INTO medida (id_contenedor, id_sensor, fecha, valor) VALUES (?,?,?,?) ON duplicate key update id_contenedor=?, id_sensor=?, fecha=?, valor=?;");  	
-    }
+    	Log.logdb.info("estoy haciendo el getMedidas");
+    	return getStatement(con,"SELECT * FROM medida");  	
+    	
+    }   
    
-    
+    public static PreparedStatement GetMedidasFromContenedor(Connection con)
+    {
+    	Log.logdb.info("estoy haciendo el getContendorMedidas");
+    	return getStatement(con,"SELECT * FROM medida WHERE id_contenedor=?;");  	
   
-      
-    public static PreparedStatement GetStationsFromCity(Connection con)
-    {
-    	return getStatement(con,"SELECT * FROM contenedor WHERE id_ciudad=?");  	
-    } 
-    
-    /*
-    public static PreparedStatement GetStationSensorMeasurementLastDays(Connection con)
-    {
-    	return getStatement(con,"SELECT date(DATE) as date, min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg, dayofweek(DATE) as dayofweek FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? and date(DATE)>=date(now()) - INTERVAL ? DAY and DATE<=now() group by date(DATE) ORDER BY DATE ASC;");  	
-    }
-    
-    public static PreparedStatement GetStationSensorMeasurementLastMonths(Connection con)
-    {
-    	return getStatement(con,"SELECT month(DATE) as month,min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? and date(DATE)>=date(now()) - INTERVAL ? DAY group by month(DATE) ORDER BY DATE ASC;");  	
-    }
-    
-    
-    public static PreparedStatement InsertWeatherForecast(Connection con)
-    {
-    	return getStatement(con,"INSERT INTO MEASUREMENT (STATION_ID, SENSORTYPE_ID, DATE, VALUE) VALUES (?,?,?,?) ON duplicate key update STATION_ID=?, SENSORTYPE_ID=?, DATE=?, VALUE=?;");  	
-    }
-    
-    public static PreparedStatement GetStationSensorMeasurementMonth(Connection con)
-    {
-    	return getStatement(con,"SELECT month(DATE) as date,  min(VALUE) as min, max(VALUE) as max, avg(VALUE) as avg FROM MEASUREMENT WHERE STATION_ID=? AND SENSORTYPE_ID=? group by month(DATE) ORDER BY DATE ASC;");  	
-    }
-    */
-
-    
-   
-    
+    }   
     
     
     

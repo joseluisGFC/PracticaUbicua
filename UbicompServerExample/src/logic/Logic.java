@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import db.Ciudad;
 import db.ConectionDDBB;
 
-import db.SensorType;
 import db.Contenedores;
+import db.Medida;
+import db.Sensor;
 import db.Topics;
 
 import java.sql.Connection;
@@ -36,7 +37,7 @@ public class Logic
 			con = conector.obtainConnection(true);
 			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.GetStations(con);//la query de la base de datos
+			PreparedStatement ps = ConectionDDBB.GetContendores(con);//la query de la base de datos
 			Log.log.info("Query=> {}", ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
@@ -70,220 +71,148 @@ public class Logic
 		return contenedores;
 		
 	}
-	public static ArrayList<Ciudad> getCitiesFromDB()
+
+	public static ArrayList<Sensor> getSensoresFromDB()
 	{
-		ArrayList<Ciudad> cities = new ArrayList<Ciudad>();
+		ArrayList<Sensor> sensores = new ArrayList<Sensor>();
 		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
+		Sensor sensor = new Sensor();
 		try
 		{
 			con = conector.obtainConnection(true);
 			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.GetCities(con);
+			PreparedStatement ps = ConectionDDBB.GetSensores(con);//la query de la base de datos
 			Log.log.info("Query=> {}", ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				Ciudad city = new Ciudad();
-				city.setId(rs.getInt("id_ciudad"));
-				city.setName(rs.getString("nombre"));
-				cities.add(city);
+				
+				sensor.setId(rs.getInt("id"));//creas un objeto contendor con los datos de la query
+				sensor.setName(rs.getString("id"));
+				sensor.setTipo(rs.getString("tipoSensor"));
+				sensor.setvalorMin(rs.getInt("valor_min"));
+				sensor.setvalorMax(rs.getInt("valor_max"));
+				sensores.add(sensor);
+				sensor = new Sensor();
 			}	
-		} catch (SQLException e)
-		{
-			Log.log.error("Error: {}", e);
-			cities = new ArrayList<Ciudad>();
-		} catch (NullPointerException e)
-		{
-			Log.log.error("Error: {}", e);
-			cities = new ArrayList<Ciudad>();
-		} catch (Exception e)
-		{
-			Log.log.error("Error:{}", e);
-			cities = new ArrayList<Ciudad>();
-		} finally
-		{
-			conector.closeConnection(con);
-		}
-		return cities;
-	}
-	
-	/**
-	 * 
-	 * @return The list of all the stations stored in the db of a city
-	 */
-	public static ArrayList<Contenedores> getStationsFromCity(int cityId)
-	{
-		ArrayList<Contenedores> stations = new ArrayList<Contenedores>();
-		
-		ConectionDDBB conector = new ConectionDDBB();
-		Connection con = null;
-		try
-		{
-			con = conector.obtainConnection(true);
-			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.GetStations(con);
-			ps.setInt(1, cityId);
-			Log.log.info("Query=> {}", ps.toString());
-			ResultSet rs = ps.executeQuery();
-			while (rs.next())
-			{
-				Contenedores station = new Contenedores();
-				station.setId(rs.getInt("id"));
-				station.setName(rs.getString("nombre"));
-				station.setLatitude(rs.getDouble("latitud"));
-				station.setLongitude(rs.getDouble("longuitud"));
-				stations.add(station);
-			}	
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Contenedores>();
+			sensores = new ArrayList<Sensor>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
-			stations = new ArrayList<Contenedores>();
+			sensores = new ArrayList<Sensor>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
-			stations = new ArrayList<Contenedores>();
+			sensores = new ArrayList<Sensor>();
 		} finally
 		{
 			conector.closeConnection(con);
+			
 		}
-		return stations;
+		return sensores;
+		
 	}
-	
 
 	
-	/**
-	 * 
-	 * @param idStation ID of the station to search
-	 * @return The list of sensors of a Installation
-	 */
-	public static ArrayList<SensorType> getStationSensorsFromDB(int idStation)
+	public static ArrayList<Medida> getMedidasFromDB()
 	{
-		ArrayList<SensorType> sensors = new ArrayList<SensorType>();	
+		ArrayList<Medida> medidas = new ArrayList<Medida>();
 		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
+		Medida medida = new Medida();
 		try
 		{
 			con = conector.obtainConnection(true);
 			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.GetStationSensors(con);
-			ps.setInt(1, idStation);
+			PreparedStatement ps = ConectionDDBB.GetMedidas(con);//la query de la base de datos
 			Log.log.info("Query=> {}", ps.toString());
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{
-				SensorType sensor = new SensorType();
-				sensor.setId(rs.getInt("id"));
-				sensor.setName(rs.getString("nombre"));
-				sensor.setUnits(rs.getString("valor_alerta")); /////////////////////////////////////////////
-				if(rs.getInt("id")>0)
-				{
-					sensor.setAvailable(1);
-					//EN:Search the last value of the station
-					PreparedStatement ps_value = ConectionDDBB.GetLastValueStationSensor(con);
-					ps_value.setInt(1, idStation);
-					ps_value.setInt(2, rs.getInt("id"));
-					Log.log.info("Query=> {}", ps_value.toString());
-					ResultSet rs_value = ps_value.executeQuery();
-					if (rs_value.next())
-					{
-						sensor.setValue(rs_value.getInt("valor_alerta"));
-						if(sensor.getValue()<rs.getInt("valor_min"))
-						{
-							sensor.setLabel(0); //Low value
-						}else
-						{
-							if(sensor.getValue()>rs.getInt("valor_max"))
-							{
-								sensor.setLabel(2); //High value
-							}else
-							{
-								sensor.setLabel(1);	 //Medium value
-							}
-						}
-					}
-				}else
-				{
-					sensor.setAvailable(0);
-					//TODO buscar la media de la ciudad para dar un valor aproximado
-				}
-				sensors.add(sensor);
+				
+				medida.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
+				medida.setId_contenedor(rs.getInt("id_contenedor"));
+				medida.setDateMeasurement(rs.getDate("fecha"));
+				medida.setValue(rs.getInt("valor"));
+				medidas.add(medida);
+				medida = new Medida();
 			}	
+			
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
-			sensors = new ArrayList<SensorType>();
+			medidas = new ArrayList<Medida>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
-			sensors = new ArrayList<SensorType>();
+			medidas = new ArrayList<Medida>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
-			sensors = new ArrayList<SensorType>();
+			medidas = new ArrayList<Medida>();
 		} finally
 		{
 			conector.closeConnection(con);
+			
 		}
-		return sensors;
+		return medidas;
+		
 	}
-	
-	
 
-	
-	/**
-	 * 	
-	 * @param idStation
-	 * @return Arraylist with the measurements
-	 */
-	
-	
-	
-	public static void storeNewMeasurement(Topics newTopic)
+	public static ArrayList<Medida> getMedidasFromContenedorFromDB(int id_contenedor)
 	{
+		ArrayList<Medida> medidas = new ArrayList<Medida>();
+		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
+		Medida medida = new Medida();
 		try
 		{
 			con = conector.obtainConnection(true);
 			Log.log.debug("Database Connected");
 			
-			PreparedStatement ps = ConectionDDBB.InsertnewMeasurement(con);
-			ps.setString(1, newTopic.getIdStation());
-			ps.setString(2, newTopic.getIdSensor());
-	        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-			ps.setString(3, sdf.format(timestamp));
-			ps.setString(4, newTopic.getValue());
-			ps.setString(5, newTopic.getIdStation());
-			ps.setString(6, newTopic.getIdSensor());
-			ps.setString(7, sdf.format(timestamp));
-			ps.setString(8, newTopic.getValue());
-			Log.log.info("Query to store Measurement=> {}", ps.toString());
-			ps.executeUpdate();
+			PreparedStatement ps = ConectionDDBB.GetMedidasFromContenedor(con);//la query de la base de datos
+			Log.log.info("Query=> {}", ps.toString());
+			ps.setInt(1, id_contenedor);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				medida.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
+				medida.setId_contenedor(rs.getInt("id_contenedor"));
+				medida.setDateMeasurement(rs.getDate("fecha"));
+				medida.setValue(rs.getInt("valor"));
+				medidas.add(medida);
+				medida = new Medida();
+			}	
+			
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
+			medidas = new ArrayList<Medida>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
+			medidas = new ArrayList<Medida>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
+			medidas = new ArrayList<Medida>();
 		} finally
 		{
 			conector.closeConnection(con);
+			
 		}
+		return medidas;
+		
 	}
-	
-	
 	
 }
