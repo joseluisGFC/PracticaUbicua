@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="ISO-8859-1">
+	<script src="./js/libs/jquery/jquery.min.js"></script>  
+	<script src="./js/libs/charts/Chart.min.js"></script>
+	
+	<title>Server example</title>
+	<style>
+		table {
+		  font-family: arial, sans-serif;
+		  border-collapse: collapse;
+		  width: 100%;
+		}
+		
+		td, th {
+		  border: 1px solid #dddddd;
+		  text-align: left;
+		  padding: 8px;
+		}
+		
+		tr:nth-child(even) {
+		  background-color: #dddddd;
+		}
+	</style>
+</head>
+<body>
+	<script>
+         $(document).ready(function() 	
+           {        	 
+     		boton=document.getElementById("buscar");
+     		boton2=document.getElementById("mostrar");
+     		boton.addEventListener("click",tomar,false);
+          });
+          
+          function tomar(){
+         	 id_contenedor = document.getElementById("id_c").value;
+         	 mostrar();
+          }
+          
+  		function mostrar()
+         {
+  	       	 $.ajax(
+  	      		 {
+  	      			data:  {id_contenedor:id_contenedor},
+  	      			url:   "GetMedidasFromContenedor",//el serverlet que te da la info
+  	      			type:  'post',
+  	      			async: false,
+  	      			success:  function (response) 
+  	      			{	
+  	      				var resp = JSON.parse(response);
+  	      				console.log(resp);
+  	      				var values = [];
+  	      				var labels = [];
+  	      				$.each(resp, function (i, value) 
+  						{
+  	      				values.push(value.value);
+  	      				labels.push(value.dateMeasurement);
+  	  					});  
+  	      				console.log(values);
+  	      				console.log(labels);
+  	      				crearGraph(labels,values);
+  	      			}
+  	      		});
+  	        }
+
+         function crearGraph(Ourlabels, Ourvalues){
+        	 ctx=document.getElementById("myCanvas");
+        	 
+        	 var myLineChart = new Chart(ctx, {
+        		    type: 'line',
+        		    data: {
+        		        labels: Ourlabels,
+        		        datasets: [{
+        		            label: 'My First dataset',
+        		            data: Ourvalues
+        		        }]
+        		    },
+        		    options: {
+        		        maintainAspectRatio: false
+        		    }
+        	});
+         }
+         
+         
+	</script>
+	<h1>SERVER EXAMPLE</h1>
+	<br>
+	
+	<div id="menu">
+		<nav class="menucss">
+			<a href="index.html">Main</a>
+			<a href="sensores.html">Sensores</a>
+			<a href="Medida.html">Medida</a>
+			<a href="Pro.html">Pro</a>
+			<a href="graph.html">Graph</a>
+		</nav>
+	</div>
+	
+	<div id="contenedor">
+		<section id="cajabuscador">
+			<form name="buscador" autocomplete="off">
+				<p>Contenedor:<br><input type="text" id="id_c" name="id_c"></p>
+				<p><input type="button" name="buscar" id="buscar" value="Buscar"></p>
+			</form>
+		</section>
+	</div>	
+	<div  style="height: 500px">
+		<canvas id="myCanvas"></canvas>
+	</div>
+
+	
+</body>
+</html>
