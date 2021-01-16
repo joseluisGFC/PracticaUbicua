@@ -95,6 +95,7 @@ public class Logic
 				sensor.setTipo(rs.getString("tipoSensor"));
 				sensor.setvalorMin(rs.getInt("valor_min"));
 				sensor.setvalorMax(rs.getInt("valor_max"));
+				sensor.setValorAlerta(rs.getInt("valor_alerta"));
 				sensores.add(sensor);
 				sensor = new Sensor();
 			}	
@@ -214,5 +215,52 @@ public class Logic
 		return medidas;
 		
 	}
+
+	public static ArrayList<Medida> getMedidasEnAlerta()
+	{
+		ArrayList<Medida> medidas = new ArrayList<Medida>();
+		
+		ConectionDDBB conector = new ConectionDDBB();
+		Connection con = null;
+		Medida medida = new Medida();
+		try
+		{
+			con = conector.obtainConnection(true);
+			Log.log.debug("Database Connected");
+			
+			PreparedStatement ps = ConectionDDBB.GetMedidasEnAlerta(con);//la query de la base de datos
+			Log.log.info("Query=> {}", ps.toString());
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{				
+				medida.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
+				medida.setId_contenedor(rs.getInt("id_contenedor"));
+				medida.setDateMeasurement(rs.getDate("fecha"));
+				medida.setValue(rs.getInt("valor"));
+				medidas.add(medida);
+				medida = new Medida();
+			}	
+			
+		} catch (SQLException e)
+		{
+			Log.log.error("Error: {}", e);
+			medidas = new ArrayList<Medida>();
+		} catch (NullPointerException e)
+		{
+			Log.log.error("Error: {}", e);
+			medidas = new ArrayList<Medida>();
+		} catch (Exception e)
+		{
+			Log.log.error("Error:{}", e);
+			medidas = new ArrayList<Medida>();
+		} finally
+		{
+			conector.closeConnection(con);
+			
+		}
+		return medidas;
+		
+	}	
+	
 	
 }

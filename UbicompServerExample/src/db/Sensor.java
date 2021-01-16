@@ -7,6 +7,7 @@ public class Sensor
     private String tipo;
     private int valorMin;
     private int valorMax;
+    private int valorAlerta;
     // constructors
     public Sensor() 
     {
@@ -15,14 +16,16 @@ public class Sensor
     	this.tipo = null;
     	this.valorMin = 0;
     	this.valorMax = 100;
+    	this.valorAlerta = 80;
     }
-    public Sensor(int id, String name, String tipo, int valorMin, int valorMax) 
+    public Sensor(int id, String name, String tipo, int valorMin, int valorMax,int valorAlerta) 
     {
     	this.id = id;
     	this.name = name;
     	this.tipo = tipo;
     	this.valorMin = valorMin;
     	this.valorMax = valorMax;
+    	this.valorAlerta = valorAlerta;
     }
 
 	public int getId() {
@@ -62,6 +65,12 @@ public class Sensor
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public int getValorAlerta() {
+		return valorAlerta;
+	}
+	public void setValorAlerta(int valorAlerta) {
+		this.valorAlerta = valorAlerta;
 	}
 
  }

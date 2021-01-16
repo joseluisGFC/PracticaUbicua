@@ -47,7 +47,8 @@
 					{
           				newRow += "<tr>";
           				newRow += "<td>" + value.id + "</td>"; 
-          				newRow += "<td>" + value.tipo + "</td>";     				
+          				newRow += "<td>" + value.tipo + "</td>";     	
+          				newRow += "<td>" + value.valorAlerta + "</td>";   
           				newRow += "</tr>";	
   					});  
       				$("#dataTable").append(newRow);
@@ -73,6 +74,7 @@
 		    <tr>
 		      <th scope="col">Id</th>
 		      <th scope="col">Tipo</th>
+		      <th scope="col">Valor Alerta</th>
 		    </tr>
 		</thead>
 		<tbody id="dataTable">

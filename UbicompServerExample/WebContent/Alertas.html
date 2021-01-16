@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<script src="./js/libs/jquery/jquery.min.js"></script>  
-	<title>Server example</title>
+	<title>Sensor example</title>
 	<style>
 		table {
 		  font-family: arial, sans-serif;
@@ -34,7 +34,7 @@
        	 $.ajax(
       		 {
       			data:  {},
-      			url:   "GetContenedores",//el serverlet que te da la info
+      			url:   "GetMedidasEnAlerta",//el serverlet que te da la info
       			type:  'post',
       			async: false,
       			success:  function (response) 
@@ -46,9 +46,10 @@
       				$.each(resp, function (i, value) 
 					{
           				newRow += "<tr>";
-          				newRow += "<td>" + value.id + "</td>";   
-          				newRow += "<td>" + value.latitude + "</td>"; 
-          				newRow += "<td>" + value.longitude + "</td>"; 
+          				newRow += "<td>" + value.dateMeasurement + "</td>"; 
+          				newRow += "<td>" + value.value + "</td>";  
+          				newRow += "<td>" + value.id_contenedor + "</td>"; 
+          				newRow += "<td>" + value.id_sensor + "</td>"; 
           				newRow += "</tr>";	
   					});  
       				$("#dataTable").append(newRow);
@@ -58,27 +59,24 @@
          
          
 	</script>
-	<h1>SERVER EXAMPLE</h1>
+	<h1>Sensores EXAMPLE</h1>
 	<br>
-	
 	<div id="menu">
 		<nav class="menucss">
 			<a href="index.html">Main</a>
 			<a href="sensores.html">Sensores</a>
 			<a href="Medida.html">Medida</a>
 			<a href="Pro.html">Pro</a>
-			<a href="graph.html">Graph</a>
-			<a href="Map.html">Map</a>
-			<a href="Alertas.html">Alertas</a>
 		</nav>
 	</div>
 
 	<table class="table">
 		<thead>
 		    <tr>
-		      <th scope="col">Id</th>
-		      <th scope="col">latitud</th>
-		      <th scope="col">longitud</th>
+		      <th scope="col">fecha</th>
+		      <th scope="col">valor</th>
+		      <th scope="col">id_contenedor</th>
+		      <th scope="col">id_sensor</th>
 		    </tr>
 		</thead>
 		<tbody id="dataTable">

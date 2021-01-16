@@ -163,7 +163,13 @@ public class ConectionDDBB
     	return getStatement(con,"SELECT * FROM medida WHERE id_contenedor=?;");  	
   
     }   
-    
+
+    public static PreparedStatement GetMedidasEnAlerta(Connection con)
+    {
+    	Log.logdb.info("estoy haciendo el getContendorMedidas");
+    	return getStatement(con,"SELECT * FROM `medida` INNER JOIN sensor ON medida.id_sensor = sensor.id WHERE medida.valor>sensor.valor_alerta");  	
+  
+    }    
     
     
     
