@@ -171,7 +171,12 @@ public class ConectionDDBB
   
     }    
     
-    
+    public static PreparedStatement GetMedidasFromContenedorFromSensor(Connection con)
+    {
+    	return getStatement(con,"SELECT * FROM medida INNER JOIN sensor ON medida.id_sensor = sensor.id WHERE id_contenedor = ? AND sensor.tipoSensor=?");  	
+  
+    }   
+
     
     
     
