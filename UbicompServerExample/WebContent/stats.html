@@ -58,30 +58,55 @@
   	      				values.push(value.value);
   	      				labels.push(value.dateMeasurement);
   	  					});  
-  	      				console.log(values);
-  	      				console.log(labels);
-  	      				crearGraph(labels,values);
+  	      				var Ourmedia = media(values);
+  	      				var Ourmoda = moda(values);
+  	      				var Ourdes = desviacionTipica(values,Ourmedia);
+  	      				var pred = (Ourmedia * 0.9 + values[values.length - 1] * 0.1);
+  	      				var newRow = "";
+          				newRow += "<tr>";
+          				newRow += "<td>" + Ourmedia + "</td>"; 
+          				newRow += "<td>" + Ourmoda + "</td>";  
+          				newRow += "<td>" + Ourdes + "</td>"; 
+          				newRow += "<td>" + pred + "</td>"; 
+          				newRow += "</tr>";	
+          				$("#dataTable").append(newRow);
   	      			}
   	      		});
   	        }
 
-         function crearGraph(Ourlabels, Ourvalues){
-        	 ctx=document.getElementById("myCanvas");
-        	 
-        	 var myLineChart = new Chart(ctx, {
-        		    type: 'line',
-        		    data: {
-        		        labels: Ourlabels,
-        		        datasets: [{
-        		            label: 'My First dataset',
-        		            data: Ourvalues
-        		        }]
-        		    },
-        		    options: {
-        		        maintainAspectRatio: false
-        		    }
-        	});
-         }
+        function media(Ourvalues){
+            var sum = 0;
+            for (var i = 0; i < Ourvalues.length; i++) {
+                sum += Ourvalues[i];
+            }
+            return sum / Ourvalues.length;
+        }
+        
+        function moda(Ourvalues) {
+            var maxValue=0, maxCount=0;
+
+            for (var i = 0; i < Ourvalues.length; ++i) {
+                var count = 0;
+                for (var j = 0; j < Ourvalues.length; ++j) {
+                    if (Ourvalues[j] == Ourvalues[i]) ++count;
+                }
+                if (count > maxCount) {
+                    maxCount = count;
+                    maxValue = Ourvalues[i];
+                }
+            }
+
+            return maxValue;
+        }
+        
+        function desviacionTipica(Ourvalues,valuesMedia){
+            var sum = 0;
+            for (var i = 0; i < Ourvalues.length; i++) {
+            	var dentro = Ourvalues[i]-valuesMedia;
+                sum += Math.pow(dentro,2);
+            }
+            return Math.sqrt(sum / Ourvalues.length);
+        }
          
          
 	</script>
@@ -107,9 +132,19 @@
 			</form>
 		</section>
 	</div>	
-	<div  style="height: 500px">
-		<canvas id="myCanvas"></canvas>
-	</div>
+	
+	<table class="table">
+		<thead>
+		    <tr>
+		      <th scope="col">Media</th>
+		      <th scope="col">Moda</th>
+		      <th scope="col">Desviacion Tipica</th>
+		      <th scope="col">Prediccion del siguiente dia</th>
+		    </tr>
+		</thead>
+		<tbody id="dataTable">
+		</tbody>
+	</table>	
 
 	
 </body>
