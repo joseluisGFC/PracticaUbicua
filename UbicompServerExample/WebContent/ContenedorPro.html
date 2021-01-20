@@ -26,17 +26,15 @@
 <body>
 	<script>
     $(document).ready(function() 
-       	 {        	 
-       		boton=document.getElementById("buscar");
+       	 {    
+			var url_string = location.href;
+			var url = new URL(url_string);
+			id_contenedor = url.searchParams.get("contenedor");		
+    		loadDetails()
        		boton2=document.getElementById("mostrar");
-       		boton.addEventListener("click",tomar,false);
        		boton2.addEventListener("click",stats,false);
             });
             
-      function tomar(){
-           	id_contenedor = document.getElementById("id_c").value;
-           	loadDetails();
-       }
       
       function stats(){
     	  tipoSensor = document.getElementById("tipo").value;
@@ -174,15 +172,6 @@
 			<a href="indexBBDD.html">Base de datos</a>
 		</nav>
 	</div>
-	
-	<div id="contenedor">
-		<section id="cajabuscador">
-			<form name="buscador" autocomplete="off">
-				<p>Contenedor:<br><input type="text" id="id_c" name="id_c"></p>
-				<p><input type="button" name="buscar" id="buscar" value="Buscar"></p>
-			</form>
-		</section>
-	</div>	
 
 	<table class="table">
 		<thead>

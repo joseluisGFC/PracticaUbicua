@@ -34,7 +34,7 @@
        	 $.ajax(
       		 {
       			data:  {},
-      			url:   "GetMedidas",//el serverlet que te da la info
+      			url:   "GetSensores",//el serverlet que te da la info
       			type:  'post',
       			async: false,
       			success:  function (response) 
@@ -46,10 +46,9 @@
       				$.each(resp, function (i, value) 
 					{
           				newRow += "<tr>";
-          				newRow += "<td>" + value.dateMeasurement + "</td>"; 
-          				newRow += "<td>" + value.value + "</td>";  
-          				newRow += "<td>" + value.id_contenedor + "</td>"; 
-          				newRow += "<td>" + value.id_sensor + "</td>"; 
+          				newRow += "<td>" + value.id + "</td>"; 
+          				newRow += "<td>" + value.tipo + "</td>";     	
+          				newRow += "<td>" + value.valorAlerta + "</td>";   
           				newRow += "</tr>";	
   					});  
       				$("#dataTable").append(newRow);
@@ -64,19 +63,26 @@
 	<div id="menu">
 		<nav class="menucss">
 			<a href="index.html">Main</a>
-			<a href="sensores.html">Sensores</a>
-			<a href="Medida.html">Medida</a>
-			<a href="Pro.html">Pro</a>
+			<a href="Map.html">Map</a>
+			<a href="Alertas.html">Alertas</a>
+			<a href="indexBBDD.html">Base de datos</a>
+		</nav>
+	</div>
+	
+		<div id="SubMenu">
+		<nav class="menucss">
+			<a href="indexBBDD.html">Contenedores</a>
+			<a href="medidaBBDD.html">Medidas</a>
+			<a href="sensoresBBDD.html">Sensores</a>
 		</nav>
 	</div>
 
 	<table class="table">
 		<thead>
 		    <tr>
-		      <th scope="col">fecha</th>
-		      <th scope="col">valor</th>
-		      <th scope="col">id_contenedor</th>
-		      <th scope="col">id_sensor</th>
+		      <th scope="col">Id</th>
+		      <th scope="col">Tipo</th>
+		      <th scope="col">Valor Alerta</th>
 		    </tr>
 		</thead>
 		<tbody id="dataTable">

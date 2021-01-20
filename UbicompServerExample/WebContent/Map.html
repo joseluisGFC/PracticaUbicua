@@ -176,7 +176,7 @@
 
                       //ES: Valores que se van a mostrar en el mapa
                       //EN: Values to be shown in the map
-                      var link= "Medida.html?station=" + markerData.id;
+                      var link= "ContenedorPro.html?contenedor=" + markerData.id;
 
                       if (((pixel.x <= (markerPixel.x + size.w / 2))  && 
                            (pixel.x >= (markerPixel.x - size.w / 2))) &&
@@ -204,6 +204,16 @@
 </head>
 
 <body>
+
+	<div id="menu">
+		<nav class="menucss">
+			<a href="index.html">Main</a>
+			<a href="Map.html">Map</a>
+			<a href="Alertas.html">Alertas</a>
+			<a href="indexBBDD.html">Base de datos</a>
+		</nav>
+	</div>
+	
 	<div class="container-fluid" style="height: 100%; overflow-y: scroll;">
 		<div class="row">
 			<div class="col-sm-12">

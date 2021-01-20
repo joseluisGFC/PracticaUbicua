@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<script src="./js/libs/jquery/jquery.min.js"></script>  
-	<title>Sensor example</title>
+	<title>Server example</title>
 	<style>
 		table {
 		  font-family: arial, sans-serif;
@@ -34,7 +34,7 @@
        	 $.ajax(
       		 {
       			data:  {},
-      			url:   "GetMedidasEnAlerta",//el serverlet que te da la info
+      			url:   "GetContenedores",//el serverlet que te da la info
       			type:  'post',
       			async: false,
       			success:  function (response) 
@@ -46,10 +46,9 @@
       				$.each(resp, function (i, value) 
 					{
           				newRow += "<tr>";
-          				newRow += "<td>" + value.dateMeasurement + "</td>"; 
-          				newRow += "<td>" + value.value + "</td>";  
-          				newRow += "<td>" + value.id_contenedor + "</td>"; 
-          				newRow += "<td>" + value.id_sensor + "</td>"; 
+          				newRow += "<td>" + value.id + "</td>";   
+          				newRow += "<td>" + value.latitude + "</td>"; 
+          				newRow += "<td>" + value.longitude + "</td>"; 
           				newRow += "</tr>";	
   					});  
       				$("#dataTable").append(newRow);
@@ -59,8 +58,9 @@
          
          
 	</script>
-	<h1>Sensores EXAMPLE</h1>
+	<h1>SERVER EXAMPLE</h1>
 	<br>
+	
 	<div id="menu">
 		<nav class="menucss">
 			<a href="index.html">Main</a>
@@ -70,13 +70,20 @@
 		</nav>
 	</div>
 	
+	<div id="SubMenu">
+		<nav class="menucss">
+			<a href="indexBBDD.html">Contenedores</a>
+			<a href="medidaBBDD.html">Medidas</a>
+			<a href="sensoresBBDD.html">Sensores</a>
+		</nav>
+	</div>
+
 	<table class="table">
 		<thead>
 		    <tr>
-		      <th scope="col">fecha</th>
-		      <th scope="col">valor</th>
-		      <th scope="col">id_contenedor</th>
-		      <th scope="col">id_sensor</th>
+		      <th scope="col">Id</th>
+		      <th scope="col">latitud</th>
+		      <th scope="col">longitud</th>
 		    </tr>
 		</thead>
 		<tbody id="dataTable">
