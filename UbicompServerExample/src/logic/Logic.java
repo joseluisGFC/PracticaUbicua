@@ -310,5 +310,51 @@ public class Logic
 		
 	}	
 	
+	public static ArrayList<Contenedores> getContenedorWithId(int id)
+	{
+		ArrayList<Contenedores> contenedores = new ArrayList<Contenedores>();
+		
+		ConectionDDBB conector = new ConectionDDBB();
+		Connection con = null;
+		Contenedores contenedor = new Contenedores();
+		try
+		{
+			con = conector.obtainConnection(true);
+			Log.log.debug("Database Connected");
+			
+			PreparedStatement ps = ConectionDDBB.GetContenedorWithIdFromDB(con);//la query de la base de datos
+			Log.log.info("Query=> {}", ps.toString());
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{
+				contenedor.setId(rs.getInt("id"));//creas un objeto contendor con los datos de la query
+				contenedor.setName(rs.getString("id"));
+				contenedor.setLatitude(rs.getDouble("latitud"));
+				contenedor.setLongitude(rs.getDouble("longuitud"));
+				contenedores.add(contenedor);
+				contenedor = new Contenedores();
+			}	
+			
+		} catch (SQLException e)
+		{
+			Log.log.error("Error: {}", e);
+			contenedores = new ArrayList<Contenedores>();
+		} catch (NullPointerException e)
+		{
+			Log.log.error("Error: {}", e);
+			contenedores = new ArrayList<Contenedores>();
+		} catch (Exception e)
+		{
+			Log.log.error("Error:{}", e);
+			contenedores = new ArrayList<Contenedores>();
+		} finally
+		{
+			conector.closeConnection(con);
+			
+		}
+		return contenedores;
+		
+	}	
 	
 }
