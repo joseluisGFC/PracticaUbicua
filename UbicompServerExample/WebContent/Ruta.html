@@ -3,7 +3,7 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<script src="./js/libs/jquery/jquery.min.js"></script>  
-	<title>Server example</title>
+	<title>Sensor example</title>
 	<style>
 		table {
 		  font-family: arial, sans-serif;
@@ -26,15 +26,21 @@
 	<script>
          $(document).ready(function() 
     	 {        	 
-        	 loadDetails(); 
+        	 boton=document.getElementById("buscar");
+        	 boton.addEventListener("click",tomar,false);
          });
+         
+         function tomar(){
+        	 	valor_minimo = document.getElementById("valor_min").value;
+            	loadDetails();
+        }
          
  		function loadDetails()
         {
        	 $.ajax(
       		 {
-      			data:  {},
-      			url:   "GetContenedores",//el serverlet que te da la info
+      			data:  {valor_minimo:valor_minimo},
+      			url:   "GetRuta",//el serverlet que te da la info
       			type:  'post',
       			async: false,
       			success:  function (response) 
@@ -46,9 +52,11 @@
       				$.each(resp, function (i, value) 
 					{
           				newRow += "<tr>";
-          				newRow += "<td>" + value.id + "</td>";   
+          				newRow += "<td>" + value.dateMeasurement + "</td>"; 
+          				newRow += "<td>" + value.value + "</td>";
           				newRow += "<td>" + value.latitude + "</td>"; 
           				newRow += "<td>" + value.longitude + "</td>"; 
+          				newRow += "<td>" + value.id_contenedor + "</td>"; 
           				newRow += "</tr>";	
   					});  
       				$("#dataTable").append(newRow);
@@ -58,7 +66,7 @@
          
          
 	</script>
-	<h1>SERVER EXAMPLE</h1>
+	<h1>Sensores EXAMPLE</h1>
 	<br>
 	
 	<div id="menu">
@@ -78,13 +86,24 @@
 			<a href="sensoresBBDD.html">Sensores</a>
 		</nav>
 	</div>
+	
+	<div id="contenedor">
+		<section id="cajabuscador">
+			<form name="buscador" autocomplete="off">
+				<p>Valor minimo de llenado:<br><input type="text" id="valor_min" name="valor_min"></p>
+				<p><input type="button" name="buscar" id="buscar" value="Buscar"></p>
+			</form>
+		</section>
+	</div>	
 
 	<table class="table">
 		<thead>
 		    <tr>
-		      <th scope="col">Id</th>
-		      <th scope="col">latitud</th>
+		      <th scope="col">fecha</th>
+		      <th scope="col">valor</th>
 		      <th scope="col">longitud</th>
+		      <th scope="col">latitud</th>
+		      <th scope="col">id_contenedor</th>
 		    </tr>
 		</thead>
 		<tbody id="dataTable">

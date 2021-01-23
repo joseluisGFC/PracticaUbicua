@@ -180,8 +180,11 @@ public class ConectionDDBB
     {
     	return getStatement(con,"SELECT * FROM contenedor WHERE id=?;");  	
     }    
-
-    
+    public static PreparedStatement GetRutaFromDB(Connection con)
+    {
+    	return getStatement(con,"SELECT * FROM `medida` Inner join contenedor on medida.id_contenedor = contenedor.id Inner join sensor on medida.id_sensor = sensor.id WHERE sensor.tipoSensor = 'Llenado' and medida.fecha = ? and medida.valor>=?;");  	
+  
+    }   
     
     
     

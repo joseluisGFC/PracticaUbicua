@@ -15,7 +15,6 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 import db.ConectionDDBB;
-import db.Topics;
 import logic.Log;
 import logic.Logic;
 /*

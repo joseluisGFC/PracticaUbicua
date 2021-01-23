@@ -8,7 +8,9 @@ import db.ConectionDDBB;
 import db.Contenedores;
 import db.Medida;
 import db.Sensor;
-import db.Topics;
+import db.Alerta;
+import db.Ruta;
+
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -264,13 +266,13 @@ public class Logic
 		
 	}	
 	
-	public static ArrayList<Medida> getMedidasEnAlerta()
+	public static ArrayList<Alerta> getMedidasEnAlerta()
 	{
-		ArrayList<Medida> medidas = new ArrayList<Medida>();
+		ArrayList<Alerta> alertas = new ArrayList<Alerta>();
 		
 		ConectionDDBB conector = new ConectionDDBB();
 		Connection con = null;
-		Medida medida = new Medida();
+		Alerta alerta = new Alerta();
 		try
 		{
 			con = conector.obtainConnection(true);
@@ -281,32 +283,84 @@ public class Logic
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
 			{				
-				medida.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
-				medida.setId_contenedor(rs.getInt("id_contenedor"));
-				medida.setDateMeasurement(rs.getDate("fecha"));
-				medida.setValue(rs.getInt("valor"));
-				medidas.add(medida);
-				medida = new Medida();
+				alerta.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
+				alerta.setId_contenedor(rs.getInt("id_contenedor"));
+				alerta.setDateMeasurement(rs.getDate("fecha"));
+				alerta.setValue(rs.getInt("valor"));
+				alerta.setTipo(rs.getString("tipoSensor"));
+				alerta.setValor_alerta(rs.getInt("valor_alerta"));
+				alertas.add(alerta);
+				alerta = new Alerta();
 			}	
 			
 		} catch (SQLException e)
 		{
 			Log.log.error("Error: {}", e);
-			medidas = new ArrayList<Medida>();
+			alertas = new ArrayList<Alerta>();
 		} catch (NullPointerException e)
 		{
 			Log.log.error("Error: {}", e);
-			medidas = new ArrayList<Medida>();
+			alertas = new ArrayList<Alerta>();
 		} catch (Exception e)
 		{
 			Log.log.error("Error:{}", e);
-			medidas = new ArrayList<Medida>();
+			alertas = new ArrayList<Alerta>();
 		} finally
 		{
 			conector.closeConnection(con);
 			
 		}
-		return medidas;
+		return alertas;
+		
+	}
+	
+	public static ArrayList<Ruta> getRutaL(int valor_minimo)
+	{
+		ArrayList<Ruta> rutas = new ArrayList<Ruta>();
+		
+		ConectionDDBB conector = new ConectionDDBB();
+		Connection con = null;
+		Ruta ruta = new Ruta();
+		try
+		{
+			con = conector.obtainConnection(true);
+			Log.log.debug("Database Connected");
+			
+			PreparedStatement ps = ConectionDDBB.GetRutaFromDB(con);//la query de la base de datos
+			Log.log.info("Query=> {}", ps.toString());
+			ps.setDate(1, new java.sql.Date(System.currentTimeMillis()));
+			ps.setInt(2, valor_minimo);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next())
+			{				
+				ruta.setId_sensor(rs.getInt("id_sensor"));//creas un objeto contendor con los datos de la query
+				ruta.setId_contenedor(rs.getInt("id_contenedor"));
+				ruta.setDateMeasurement(rs.getDate("fecha"));
+				ruta.setValue(rs.getInt("valor"));
+				ruta.setLatitude(rs.getDouble("latitud"));
+				ruta.setLongitude(rs.getDouble("longuitud"));
+				rutas.add(ruta);
+				ruta = new Ruta();
+			}	
+			
+		} catch (SQLException e)
+		{
+			Log.log.error("Error: {}", e);
+			rutas = new ArrayList<Ruta>();
+		} catch (NullPointerException e)
+		{
+			Log.log.error("Error: {}", e);
+			rutas = new ArrayList<Ruta>();
+		} catch (Exception e)
+		{
+			Log.log.error("Error:{}", e);
+			rutas = new ArrayList<Ruta>();
+		} finally
+		{
+			conector.closeConnection(con);
+			
+		}
+		return rutas;
 		
 	}	
 	

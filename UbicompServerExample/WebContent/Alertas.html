@@ -47,7 +47,9 @@
 					{
           				newRow += "<tr>";
           				newRow += "<td>" + value.dateMeasurement + "</td>"; 
-          				newRow += "<td>" + value.value + "</td>";  
+          				newRow += "<td>" + value.value + "</td>"; 
+          				newRow += "<td>" + value.valor_alerta + "</td>"; 
+          				newRow += "<td>" + value.tipo + "</td>"; 
           				newRow += "<td>" + value.id_contenedor + "</td>"; 
           				newRow += "<td>" + value.id_sensor + "</td>"; 
           				newRow += "</tr>";	
@@ -67,6 +69,7 @@
 			<a href="Map.html">Map</a>
 			<a href="Alertas.html">Alertas</a>
 			<a href="indexBBDD.html">Base de datos</a>
+			<a href="Ruta.html">Ruta</a>
 		</nav>
 	</div>
 	
@@ -74,7 +77,9 @@
 		<thead>
 		    <tr>
 		      <th scope="col">fecha</th>
-		      <th scope="col">valor</th>
+		      <th scope="col">valor recibido</th>
+		      <th scope="col">valor minimo de alerta</th>
+		      <th scope="col">Tipo de Sensor</th>
 		      <th scope="col">id_contenedor</th>
 		      <th scope="col">id_sensor</th>
 		    </tr>

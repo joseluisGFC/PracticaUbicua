@@ -12,19 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 
-import db.Alerta;
+import db.Ruta;
 import logic.Log;
 import logic.Logic;
 
 /**
  * SERVLET THAR SEARCH ALL THE CITIES STORED IN THE DATABASE
  */
-@WebServlet("/GetMedidasEnAlerta")
-public class GetMedidasEnAlerta extends HttpServlet {
+@WebServlet("/GetRuta")
+public class GetRuta extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 
-    public GetMedidasEnAlerta() 
+    public GetRuta() 
     {
         super();
     }
@@ -36,7 +36,8 @@ public class GetMedidasEnAlerta extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		try 
 		{
-			ArrayList<Alerta> valores =  Logic.getMedidasEnAlerta();//llamas a logic DB para extraer el contenido de la base de datos
+			int valor_minimo = Integer.parseInt(request.getParameter("valor_minimo"));	
+			ArrayList<Ruta> valores =  Logic.getRutaL(valor_minimo);//llamas a logic DB para extraer el contenido de la base de datos
 			String jsonStations = new Gson().toJson(valores);//Crea el json
 			Log.log.info("JSON Values=> {}", jsonStations);
 			out.println(jsonStations);
